@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>End to End Testing for Expo Apps With CircleCI &amp; Detox | David Kircos</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<nav><a href="../../">David Kircos</a> · <a href="../../blog/">Blog</a></nav>
+<main>
+<h1>End to End Testing for Expo Apps With CircleCI &amp; Detox</h1>
+<p class="meta">April 19, 2021</p>
+<article>
+<p>It is becoming increasingly common for developers to begin to develop their apps with <a href="https://expo.io/">Expo</a> with React Native. Expo is a great developer experience for getting started. However, some more advanced workflows for publishing production applications do not come out of the box. One of the missing workflows is end-to-end testing. So we set out to develop a method to run tests on our expo app using Continous Integration. Here is the configuration we came up with to successfully use <a href="https://circleci.com/">CircleCI</a> to test our <a href="https://expo.io/">Expo</a> app using the testing framework <a href="https://github.com/wix/Detox">Detox</a> + <a href="https://jestjs.io/">Jest</a>.</p>
+<p>Below is our <code>config.yml</code> file. Our process works by performing the following steps:</p>
+<ol>
+<li>Install application dependencies.</li>
+<li>Log into the ExpoCLI using env vars (you have to set these in the CircleCI UI).</li>
+<li>Instruct Expo to do an iOS build with the target simulator.</li>
+<li>Download the build from Expo and extract it.</li>
+<li>Install testing packages.</li>
+<li>Run tests using detox test.</li>
+</ol>
+<p><code>config.yml</code></p>
+<p>
+<script src="https://gist.github.com/davidkircos/4bf3db0400d366eb3a11481cb8aa7230.js"></script>
+</p>
+<p>Here is a copy of our <code>.detoxrc.json</code> file</p>
+<p>
+<script src="https://gist.github.com/davidkircos/97bf46429bbabff5d3313a58eba3996a.js"></script>
+</p>
+<p>And here is our <code>testing/config.json</code> file</p>
+<p>
+<script src="https://gist.github.com/davidkircos/b1f95ae34f2a3e947c80f501c58143c3.js"></script>
+</p>
+<p>Our test runner takes about 10 minutes to set up and run a set of ~10 tests. The test setup is probably partially redundant and could be sped up. However, this works for us today! We hope this is helpful for you in setting up Expo End to End Testing!</p>
+</article>
+<p class="backlink"><a href="../">&larr; all posts</a></p>
+</main>
+<footer>© David Kircos</footer>
+</body>
+</html>
