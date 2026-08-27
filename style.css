@@ -10,6 +10,7 @@ nav { margin-bottom: 2rem; }
 h1 { font-size: 1.5rem; }
 h2 { font-size: 1.2rem; margin-top: 2rem; }
 .meta { color: #666; }
+.headshot { display: block; margin: 1rem 0; }
 ul.career { padding-left: 1.2rem; }
 ul.career li { margin: 0.75rem 0; }
 ul.posts { padding-left: 1.2rem; }
