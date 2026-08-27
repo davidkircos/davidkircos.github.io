@@ -13,7 +13,6 @@ CNAME                   Custom domain for GitHub Pages
 archive/index.html      Index of all 68 archived blog posts
 archive/<slug>/         One folder per archived post
 archive/assets/         Images used by archived posts
-archive/happiness/      Historical happiness-tracking page
 ```
 
 ## Preview locally
