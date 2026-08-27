@@ -2,13 +2,18 @@
 
 Personal website. Plain HTML and one CSS file — no build step, no dependencies, no framework.
 
-A single page: about + career summary. The old blog posts (68 posts, 2016–2022, migrated from the previous Mezzanine site) were removed but live in git history — commit `14230b1` has all of them plus their images if they're ever wanted back.
+The home page is a single page: about + resume. The old blog posts (68 posts, 2016–2022, migrated from the previous Mezzanine site) live under `archive/` — served at `/archive/` but not linked from the home page.
 
 ## Structure
 
 ```
-index.html   The whole site
-style.css    The only stylesheet
+index.html              Home page (about + resume)
+style.css               The only stylesheet
+CNAME                   Custom domain for GitHub Pages
+archive/index.html      Index of all 68 archived blog posts
+archive/<slug>/         One folder per archived post
+archive/assets/         Images used by archived posts
+archive/happiness/      Historical happiness-tracking page
 ```
 
 ## Preview locally

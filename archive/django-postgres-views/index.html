@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Django + Postgres Views | David Kircos</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<nav><a href="../../">David Kircos</a> · <a href="../">Archive</a></nav>
+<main>
+<h1>Django + Postgres Views</h1>
+<p class="meta">April 8, 2021</p>
+<article>
+<p>Over the years, the Django ORM has become my go-to way to interact with a database from Python. It is an incredibly robust binding between the database and Python. As Postgres added advanced database features, the Django ORM kept up. An early example of this is Django's implementation of JSONB fields. The JSONB fields allowed you to save JSON as a field and interact with the JSON object's contents from the SQL query level. Django quickly supported this powerful feature. Awesome.</p>
+
+<p>Another powerful feature added Postgres added is Views. Views are a simple database feature that allows you to create an alias for a common query. Suppose you were routinely running a SELECT statement on a table of transactions for the category outdoor_products:</p>
+<pre>SELECT * FROM tranactions_table WHERE product_type='outdoor'</pre>
+<p>In Postgres, you can save this query as a view for future reference.</p>
+<div>
+<pre>CREATE OR REPLACE VIEW 'outdoor_product_transactions_view' AS 
+  (SELECT * FROM tranactions_table WHERE product_type='outdoor')</pre>
+<div>Then you can just</div>
+<pre>SELECT * FROM outdoor_product_transactions_view</pre>
+<div>And easily apply additional filters</div>
+<pre>SELECT * FROM outdoor_product_transactions_view WHERE amount &gt; 1000</pre>
+</div>
+<p>This feature is great for complex queries you are regularly repeating.</p>
+
+<p>In the application I am currently building, there are complex queries that I run regularly on our API. I would also like our BI tools to benefit from these complex queries without repeating the logic in SQL. So I set out to create an easy way for a Django queryset to manage a Postgres view.</p>
+
+<p>Here is the result:</p>
+<p><em>create_or_replace_view.py</em></p>
+<pre>from django.db import connection
+
+def create_or_replace_view(view_name, view_qs):
+    with connection.cursor() as cursor:
+        queryset = view_qs
+        compiler = queryset.query.get_compiler(using=queryset.db)
+        sql, params = compiler.as_sql()
+        sql = "CREATE OR REPLACE VIEW {view} AS {sql}".format(
+            view=connection.ops.quote_name(view_name), sql=sql
+        )
+        cursor.execute(sql, params)</pre>
+<p><i>migrate_views.py</i></p>
+<pre>from postgresviews.create_or_replace_view import create_or_replace_view
+from ledger.querysets.formattedTransactionsQS import FormattedTransactionsQS
+
+## Define Views Here
+## NOTE: Renamed or Deleted Views will not automatically clean up the old version.
+create_or_replace_view(
+    "view_formatted_transactions", FormattedTransactionsQS().get_qs()
+)
+</pre>
+
+<p><em>migrate_views.py</em> is run on every deployment of our Django API. This allows me to use complex querysets with our API via Django Rest Framework and build a Postgres view of the queryset available to our BI tools. Magic! I hope you find this useful in your own applications!</p>
+</article>
+<p class="backlink"><a href="../">&larr; all posts</a></p>
+</main>
+<footer>© David Kircos</footer>
+</body>
+</html>
