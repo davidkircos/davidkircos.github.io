@@ -1,13 +1,13 @@
 /* Plain-text style. No fonts loaded; browser default serif on purpose. */
 body {
   max-width: 40rem;
-  margin: 2.5rem 0;
+  margin: 0 0 2.5rem;
   padding: 0 1rem;
   line-height: 1.5;
   color: #111;
 }
 nav { margin-bottom: 2rem; }
-h1 { font-size: 1.5rem; }
+h1 { font-size: 1.5rem; margin-top: 0; }
 h2 { font-size: 1.2rem; margin-top: 2rem; }
 .meta { color: #666; }
 .headshot { display: block; margin: 1rem 0; }
